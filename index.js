@@ -2,6 +2,7 @@
 const express = require("express");
 //const { MongoClient, ObjectId } = require("mongodb");
 const mongodb = require("mongodb"); // youtube Mensagens
+const ObjectId = mongodb.ObjectId;
 
 //const connectionString = "mongodb+srv://admin:Aq9MK0UnQLYlOO7c@cluster0.qf7mo.mongodb.net/dbherois?retryWrites=true&w=majority";
 const connectionString = "mongodb+srv://admin:Aq9MK0UnQLYIOO7c@cluster0.qf7mo.mongodb.net/";
@@ -34,21 +35,17 @@ async function main() {
 
 
 
-  // ************ [GET] Criação do endpoint principal - "Hello World" ************
+  // ***************** [GET] Criação do endpoint principal - "Hello World" *****************
   app.get("/", function (req, res) {
     res.send("Hello World");
   });
 
 
 
-  // **************************** Heróis e Heroínas ******************************
+  // ********************************* HERÓIS E HEROINAS ***********************************
 
-  // const herois = ["Mulher Maravilha", "Capitã Marvel", "Homem de Ferro"];
-  //                          0                 1                 2
-
-  // ************ [GET] Read All (Ler todos os itens) ************
+   // ************ [GET] Read All (Ler todos os itens) ************
   app.get("/herois", async function (req, res) {
-    console.log(await collection.find({}).toArray());
     const documentos = await collection.find({}).toArray();
     res.send(documentos);
   });
@@ -59,7 +56,7 @@ async function main() {
     const id = req.params.id;
 
     // Buscamos o item dentro da lista, utilizando o ID
-    const item = await collection.findOne({ _id: new ObjectId(id) });
+    const item = await collection.find({ _id: ObjectId(id) }).toArray();
 
     if (!item) {
       // Envia uma resposta de não encontrado
