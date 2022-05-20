@@ -74,7 +74,7 @@ async function main() {
     // Obtemos o nome que foi enviado no body da requisição
     const item = req.body;
 
-    if (!item || !item.name) {
+    if (!item) {
       res
         .status(400)
         .send(
@@ -90,8 +90,6 @@ async function main() {
     // do objeto retornado pela função insertOne() e colocando dentro de uma variável
     // criada com o mesmo nome
     const { insertedCount } = await collection.insertOne(item);
-
-    console.log(resultado);
 
     if (insertedCount !== 1) {
       res.send('Ocorreu um erro ao cria o item.')
