@@ -95,11 +95,11 @@ async function main() {
     // const { insertedCount } = await collection.insertOne(item);
     const resultado = await collection.insertOne(item);
 
-    if (resultado.insertedCount !== 1) {
-      res.send('Ocorreu um erro ao criar o item.')
-      
-      return;
-    }
+    // if (resultado.insertedCount !== 1) {
+    //   res.send('Ocorreu um erro ao criar o item.')
+    //  
+    //   return;
+    // }
     
     res.send(item);
   });
