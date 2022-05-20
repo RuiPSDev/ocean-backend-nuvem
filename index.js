@@ -95,6 +95,8 @@ async function main() {
 
     if (insertedCount !== 1) {
       res.send('Ocorreu um erro ao cria o item.')
+      
+      return;
     }
     
     res.send(item);
