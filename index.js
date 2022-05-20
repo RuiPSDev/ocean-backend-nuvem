@@ -96,6 +96,7 @@ async function main() {
     console.info(resultado);
 
     if (resultado.insertedCount !== 1) {
+      res.send(resultado.insertedCount);
       res.send('Ocorreu um erro ao criar o item.')
       
       return;
@@ -138,10 +139,10 @@ async function main() {
       }
     );
 
-    res.send(novoItem);
+    res.send(await collection.findOne({ _id: ObjectId(id) }));
   });
 
-  // Delete (Remover um item)
+  // ************  Delete (Remover um item)  ************
   app.delete("/herois/:id", async function (req, res) {
     // Obtemos o ID do registro que será excluído
     const id = req.params.id;
