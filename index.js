@@ -2,7 +2,7 @@
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
 
-const url = "mongodb+srv://admin:Aq9MK0UnQLYIOO7c@cluster0.qf7mo.mongodb.net";
+const url = "mongodb+srv://admin:Aq9MK0UnQLYIOO7c@cluster0.qf7mo.mongodb.net/dbherois?retryWrites=true&w=majority";
 const dbName = "ocean_bancodedados_13_05_2022";
 
 async function main() {
