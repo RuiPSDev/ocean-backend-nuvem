@@ -69,7 +69,7 @@ async function main() {
     res.send(item);
   });
 
-  // ************ Create (Criar um item) ************
+  // ************  Create (Criar um item)  ************
   app.post("/herois", async function (req, res) {
     // Obtemos o nome que foi enviado no body da requisição
     const item = req.body;
@@ -104,33 +104,41 @@ async function main() {
     res.send(item);
   });
 
-  // Update (Editar um item)
+  // ************  Update (Editar um item)  ************
   app.put("/herois/:id", async function (req, res) {
     // Obtemos o ID do item a ser atualizado
     const id = req.params.id;
 
-    const itemEncontrado = await collection.findOne({ _id: new ObjectId(id) });
+    const novoItem = req.body;
 
-    if (!itemEncontrado) {
+    if (!novoItem || !novoItem.name) {
       // Envia uma resposta de não encontrado
-      res.status(404).send("Item não encontrado.");
+      res.status(404).send("Item inválido.");
 
       // Encerra a função
       return;
     }
+  
+    const quantidade_itens = await collection.countDocuments({ _id: ObjectId(id) });
+
+    if (quantidade_itens !== 1) {
+      res.send('Item não encontrada.');
+
+      return;
+    }
 
     // Pegamos a nova informação que está sendo enviada
-    const item = req.body;
+    // const item = req.body;
 
     // Atualizamos a informação no DB
     await collection.updateOne(
-      { _id: new ObjectId(id) },
+      { _id: ObjectId(id) },
       {
-        $set: item,
+        $set: novoItem,
       }
     );
 
-    res.send(item);
+    res.send(novoItem);
   });
 
   // Delete (Remover um item)
