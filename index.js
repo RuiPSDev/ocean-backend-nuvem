@@ -89,11 +89,13 @@ async function main() {
     // { insertedCount } -> desconstrução de objeto... pegando apenas 'insertedCount'
     // do objeto retornado pela função insertOne() e colocando dentro de uma variável
     // criada com o mesmo nome
-    const { insertedCount } = await collection.insertOne(item);
+    
+    // const { insertedCount } = await collection.insertOne(item);
+    const resultado = await collection.insertOne(item);
 
-    console.log(insertedCount);
+    console.info(resultado);
 
-    if (insertedCount !== 1) {
+    if (resultado.insertedCount !== 1) {
       res.send('Ocorreu um erro ao criar o item.')
       
       return;
