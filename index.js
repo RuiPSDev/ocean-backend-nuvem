@@ -96,7 +96,6 @@ async function main() {
     console.info(resultado);
 
     if (resultado.insertedCount !== 1) {
-      res.send(resultado.insertedCount);
       res.send('Ocorreu um erro ao criar o item.')
       
       return;
@@ -139,7 +138,7 @@ async function main() {
       }
     );
 
-    res.send(await collection.findOne({ _id: ObjectId(id) }));
+    res.send(novoItem);
   });
 
   // ************  Delete (Remover um item)  ************
