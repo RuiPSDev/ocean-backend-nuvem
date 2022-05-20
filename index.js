@@ -91,8 +91,10 @@ async function main() {
     // criada com o mesmo nome
     const { insertedCount } = await collection.insertOne(item);
 
+    console.log(insertedCount);
+
     if (insertedCount !== 1) {
-      res.send('Ocorreu um erro ao cria o item.')
+      res.send('Ocorreu um erro ao criar o item.')
       
       return;
     }
