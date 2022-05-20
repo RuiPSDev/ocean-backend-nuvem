@@ -44,7 +44,7 @@ async function main() {
 
   // ********************************* HERÓIS E HEROINAS ***********************************
 
-   // ************ [GET] Read All (Ler todos os itens) ************
+  // ************ [GET] Read All (Ler todos os itens) ************
   app.get("/herois", async function (req, res) {
     const documentos = await collection.find({}).toArray();
     res.send(documentos);
@@ -56,7 +56,7 @@ async function main() {
     const id = req.params.id;
 
     // Buscamos o item dentro da lista, utilizando o ID
-    const item = await collection.find({ _id: ObjectId(id) }).toArray();
+    const item = await collection.findOne({ _id: ObjectId(id) });
 
     if (!item) {
       // Envia uma resposta de não encontrado
@@ -69,12 +69,12 @@ async function main() {
     res.send(item);
   });
 
-  // Create (Criar um item)
+  // ************ Create (Criar um item) ************
   app.post("/herois", async function (req, res) {
     // Obtemos o nome que foi enviado no body da requisição
     const item = req.body;
 
-    if (!item) {
+    if (!item || !item.name) {
       res
         .status(400)
         .send(
@@ -86,8 +86,17 @@ async function main() {
     }
 
     // Adicionamos esse item obtido dentro da lista de heróis
-    await collection.insertOne(item);
+    // { insertedCount } -> desconstrução de objeto... pegando apenas 'insertedCount'
+    // do objeto retornado pela função insertOne() e colocando dentro de uma variável
+    // criada com o mesmo nome
+    const { insertedCount } = await collection.insertOne(item);
 
+    console.log(resultado);
+
+    if (insertedCount !== 1) {
+      res.send('Ocorreu um erro ao cria o item.')
+    }
+    
     res.send(item);
   });
 
