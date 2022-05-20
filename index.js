@@ -50,7 +50,8 @@ async function main() {
     res.send(documentos);
   });
 
-  // ************ [GET with ID] Read by ID (Visualizar um item pelo ID) ************
+
+  // ************ [GET] Read by ID (Visualizar um item pelo ID) ************
   app.get("/herois/:id", async function (req, res) {
     // Recebemos o ID que iremos buscar
     const id = req.params.id;
@@ -69,7 +70,8 @@ async function main() {
     res.send(item);
   });
 
-  // ************  Create (Criar um item)  ************
+
+  // ************  [POST] Create (Criar um item)  ************
   app.post("/herois", async function (req, res) {
     // Obtemos o nome que foi enviado no body da requisição
     const item = req.body;
@@ -78,7 +80,7 @@ async function main() {
       res
         .status(400)
         .send(
-          "Você deve informar a propriedade 'nome' no corpo da requisição."
+          "Você deve informar a propriedade 'name' no corpo da requisição."
         );
 
       // Encerra a função
@@ -95,16 +97,17 @@ async function main() {
 
     console.info(resultado);
 
-    if (resultado.insertedCount !== 1) {
-      res.send('Ocorreu um erro ao criar o item.')
-      
-      return;
-    }
+    // if (resultado.insertedCount !== 1) {
+    //   res.send('Ocorreu um erro ao criar o item.')
+    //   
+    //   return;
+    // }
     
     res.send(item);
   });
 
-  // ************  Update (Editar um item)  ************
+
+  // ************  [PUT] Update (Editar um item)  ************
   app.put("/herois/:id", async function (req, res) {
     // Obtemos o ID do item a ser atualizado
     const id = req.params.id;
@@ -122,7 +125,7 @@ async function main() {
     const quantidade_itens = await collection.countDocuments({ _id: ObjectId(id) });
 
     if (quantidade_itens !== 1) {
-      res.send('Item não encontrada.');
+      res.send('Item não encontrado.');
 
       return;
     }
@@ -141,23 +144,28 @@ async function main() {
     res.send(novoItem);
   });
 
-  // ************  Delete (Remover um item)  ************
+
+  // ************  [DELETE] Delete (Remover um item)  ************
   app.delete("/herois/:id", async function (req, res) {
     // Obtemos o ID do registro que será excluído
     const id = req.params.id;
 
-    const itemEncontrado = await collection.findOne({ _id: new ObjectId(id) });
+    const quantidade_itens = await collection.countDocuments({ _id: ObjectId(id) });
 
-    if (!itemEncontrado) {
-      // Envia uma resposta de não encontrado
-      res.status(404).send("Item não encontrado.");
+    if (quantidade_itens !== 1) {
+      res.send('Item não encontrado.');
 
-      // Encerra a função
       return;
     }
 
     // Removemos o item do DB
-    await collection.deleteOne({ _id: new ObjectId(id) });
+    const { deletedCount } = await collection.deleteOne({ _id: ObjectId(id) });
+
+    if (deletedCount !== 1) {
+      res.send('Ocorreu um erro ao remover o item.');
+
+      return;
+    }
 
     res.send("Item removido com sucesso!");
   });
