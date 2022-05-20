@@ -1,18 +1,29 @@
 //require('dotenv').config()
 const express = require("express");
-const { MongoClient, ObjectId } = require("mongodb");
+//const { MongoClient, ObjectId } = require("mongodb");
+const mongodb = require("mongodb"); // youtube Mensagens
 
-const url = "mongodb+srv://admin:Aq9MK0UnQLYIOO7c@cluster0.qf7mo.mongodb.net/dbherois?retryWrites=true&w=majority";
-const dbName = "ocean_bancodedados_13_05_2022";
+//const connectionString = "mongodb+srv://admin:Aq9MK0UnQLYlOO7c@cluster0.qf7mo.mongodb.net/dbherois?retryWrites=true&w=majority";
+const connectionString = "mongodb+srv://admin:Aq9MK0UnQLYIOO7c@cluster0.qf7mo.mongodb.net/";
+const dbName = "dbherois"; // aula do Ocean - herois
+
+
+main();
+
 
 async function main() {
-  console.log("Conectando com o banco de dados...");
+  console.info("Conectando com o banco de dados MongoDB...");
 
-  // const client = await MongoClient.connect(url);
+  const options = {
+    useUnifiedTopology: true
+  };
 
-  // const db = client.db(dbName);
-
-  // const collection = db.collection("herois");
+  // Aplicação se conecta ao gerenciador de banco de dados MongoDB
+  const client = await mongodb.MongoClient.connect(connectionString);
+  // Pega uma conexão válida ao banco 'dbherois'
+  const db = client.db(dbName); // aula do Ocean - herois
+  // Cria uma variável collection linkada à coleção 'herois' do banco 'dbHerois'
+  const collection = db.collection("herois");
 
   console.log("Conexão com o banco de dados realizada com sucesso.");
 
@@ -21,24 +32,28 @@ async function main() {
   // Indica para o Express que estamos utilizando JSON na requisições
   app.use(express.json());
 
-  // Criação do endpoint principal
+
+
+  // ************ [GET] Criação do endpoint principal - "Hello World" ************
   app.get("/", function (req, res) {
     res.send("Hello World");
   });
 
-  // Heróis e Heroínas
 
-  const herois = ["Mulher Maravilha", "Capitã Marvel", "Homem de Ferro"];
-  //               0                    1               2
 
-  // Read All (Ler todos os itens)
+  // **************************** Heróis e Heroínas ******************************
+
+  // const herois = ["Mulher Maravilha", "Capitã Marvel", "Homem de Ferro"];
+  //                          0                 1                 2
+
+  // ************ [GET] Read All (Ler todos os itens) ************
   app.get("/herois", async function (req, res) {
-    const documentos = await collection.find().toArray();
-
+    console.log(await collection.find({}).toArray());
+    const documentos = await collection.find({}).toArray();
     res.send(documentos);
   });
 
-  // Read by ID (Visualizar um item pelo ID)
+  // ************ [GET with ID] Read by ID (Visualizar um item pelo ID) ************
   app.get("/herois/:id", async function (req, res) {
     // Recebemos o ID que iremos buscar
     const id = req.params.id;
@@ -136,4 +151,3 @@ async function main() {
   );
 }
 
-main();
